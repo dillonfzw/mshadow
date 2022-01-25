@@ -1,10 +1,10 @@
 # set LD_LIBRARY_PATH
 export CC  = gcc
 export CXX = g++
-export NVCC =nvcc
+export NVCC =clang++
 include config.mk
 include ../make/mshadow.mk
-export CFLAGS = -Wall -O3 -std=c++11 -I../ $(MSHADOW_CFLAGS)
+export CFLAGS = -Wall -O3 -std=c++11 -I../ $(MSHADOW_CFLAGS) -I/usr/local/corex-2.0.0/include
 export LDFLAGS= -lm $(MSHADOW_LDFLAGS)
 export NVCCFLAGS = -O3 --use_fast_math -ccbin $(CXX) $(MSHADOW_NVCCFLAGS)
 

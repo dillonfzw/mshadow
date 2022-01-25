@@ -37,3 +37,4 @@ PS_THIRD_PATH = NONE
 # whether compile with rabit allreduce
 USE_RABIT_PS = 0
 RABIT_PATH = NONE
+USE_BLAS=blas

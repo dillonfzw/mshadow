@@ -158,9 +158,7 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #if MSHADOW_USE_CBLAS
-extern "C" {
-    #include <cblas.h>
-}
+    #include <cublas.h>
 #elif MSHADOW_USE_MKL
   #include <mkl_blas.h>
   #include <mkl_cblas.h>
