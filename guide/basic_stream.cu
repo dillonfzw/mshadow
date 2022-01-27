@@ -1,5 +1,6 @@
 // header file to use mshadow
 #include "mshadow/tensor.h"
+#define DEV_ID 7
 // this namespace contains all data structures, functions
 using namespace mshadow;
 // this namespace contains all operator overloads
@@ -9,14 +10,14 @@ int main(void) {
   // intialize tensor engine before using tensor operation, needed for CuBLAS
   InitTensorEngine<gpu>();
   // create a 2 x 5 tensor, from existing space
-  Stream<gpu> *sm1 = NewStream<gpu>();
-  Stream<gpu> *sm2 = NewStream<gpu>();
+  Stream<gpu> *sm1 = NewStream<gpu>(DEV_ID);
+  Stream<gpu> *sm2 = NewStream<gpu>(DEV_ID);
   Tensor<gpu, 2, float> ts1 = NewTensor<gpu, float>(Shape2(2, 5), 0.0f, sm1);
   Tensor<gpu, 2, float> ts2 = NewTensor<gpu, float>(Shape2(2, 5), 0.0f, sm2);
   ts1 = 1; // Should use stream 0.
   ts2 = 2; // Should use stream 1. Can run in parallel with stream 0.
   Tensor<gpu, 2> res = NewTensor<gpu, float>(Shape2(2, 2), 0.0f);
-  res.stream_ = NewStream<gpu>();
+  res.stream_ = NewStream<gpu>(DEV_ID);
   res = dot(ts1, ts2.T()); //Should use stream 2.
 
   Tensor<cpu, 2> cpu_res = NewTensor<cpu, float>(Shape2(2, 2), 0.0f);

@@ -44,9 +44,23 @@ inline void AllocSpace(Tensor<gpu, dim, DType> *obj, bool pad) {
                                       obj->shape_.FlatTo2D()[0]));
     obj->stride_ = static_cast<index_t>(pitch / sizeof(DType));
   } else {
+    /*
     obj->stride_ = obj->size(dim - 1);
+    printf("cudaMallocPitch1(), pitch=%d, stride=%d, size1=%d, size2=%d\n",
+        pitch, obj->stride_, obj->shape_.Size(), sizeof(DType)
+    );
     MSHADOW_CUDA_CALL(cudaMallocPitch(reinterpret_cast<void**>(&(obj->dptr_)), &pitch,
                                       obj->shape_.Size() * sizeof(DType), 1));
+    */
+    ///*
+    int size_ = std::max(32, obj->shape_.Size());
+    obj->stride_ = static_cast<index_t>(obj->shape_.Size());
+    printf("cudaMallocPitch2(), pitch=%d, stride=%d, size1=%d, size2=%d\n",
+        pitch, obj->stride_, obj->shape_.Size(), sizeof(DType)
+    );
+    MSHADOW_CUDA_CALL(cudaMalloc(reinterpret_cast<void**>(&(obj->dptr_)),
+                                      size_ * sizeof(DType)));
+    //*/
   }
 }
 template<int dim, typename DType>

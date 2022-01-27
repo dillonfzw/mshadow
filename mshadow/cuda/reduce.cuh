@@ -67,24 +67,24 @@ inline __device__ void ReduceX(volatile DType  buf[], int tid) {
 #if MSHADOW_OLD_CUDA
     __syncthreads();
 #else
-    __syncwarp();
+    __syncwarp(0);
 #endif
   }
   if (x_bits >= 4) {
     if (tid < 8) Reducer::Reduce(buf[tid] , buf[tid + 8]);
-    __syncwarp();
+    __syncwarp(0);
   }
   if (x_bits >= 3) {
     if (tid < 4) Reducer::Reduce(buf[tid] , buf[tid + 4]);
-    __syncwarp();
+    __syncwarp(0);
   }
   if (x_bits >= 2) {
     if (tid < 2) Reducer::Reduce(buf[tid] , buf[tid + 2]);
-    __syncwarp();
+    __syncwarp(0);
   }
   if (x_bits >= 1) {
     if (tid < 1) Reducer::Reduce(buf[tid] , buf[tid + 1]);
-    __syncwarp();
+    __syncwarp(0);
   }
 }
 template<typename Reducer, int x_bits, typename DType>
