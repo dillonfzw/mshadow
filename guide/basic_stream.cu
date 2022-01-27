@@ -1,6 +1,6 @@
 // header file to use mshadow
 #include "mshadow/tensor.h"
-#define DEV_ID 7
+#define DEV_ID 0
 // this namespace contains all data structures, functions
 using namespace mshadow;
 // this namespace contains all operator overloads

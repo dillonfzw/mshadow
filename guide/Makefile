@@ -1,12 +1,18 @@
 # set LD_LIBRARY_PATH
 export CC  = gcc
 export CXX = g++
-export NVCC = clang++
+# nv
+export NVCC = nvcc
+# corex
+#export NVCC = clang++
 include config.mk
 include ../make/mshadow.mk
 export CFLAGS = -Wall -O3 -std=c++11 -I../ $(MSHADOW_CFLAGS)
 export LDFLAGS= -lm $(MSHADOW_LDFLAGS)
-export NVCCFLAGS = -O3 -I../ -std=c++11 -DMSHADOW_FORCE_STREAM=0 -DMSHADOW_USE_MKL=0 $(MSHADOW_NVCCFLAGS)
+# nv
+export NVCCFLAGS = -O3 --use_fast_math -ccbin $(CXX) -DMSHADOW_FORCE_STREAM=0 $(MSHADOW_NVCCFLAGS)
+# corex
+#export NVCCFLAGS = -O3 -I../ -std=c++11 -DMSHADOW_FORCE_STREAM=0 -DMSHADOW_USE_MKL=0 $(MSHADOW_NVCCFLAGS)
 
 # specify tensor path
 BIN = basic defop
@@ -28,10 +34,16 @@ $(OBJ) :
 	$(CXX) -c $(CFLAGS) -o $@ $(firstword $(filter %.cpp %.c, $^) )
 
 $(CUOBJ) :
-	$(NVCC) -c -o $@ $(NVCCFLAGS) $(filter %.cu, $^)
+	# nv
+	$(NVCC) -c -o $@ $(NVCCFLAGS) -Xcompiler "$(CFLAGS)" $(filter %.cu, $^)
+	# corex
+	#$(NVCC) -c -o $@ $(NVCCFLAGS) $(filter %.cu, $^)
 
 $(CUBIN) :
-	$(NVCC) -o $@ $(NVCCFLAGS) $(LDFLAGS) $(filter %.cu %.cpp %.o, $^)
+	# nv
+	$(NVCC) -o $@ $(NVCCFLAGS) -Xcompiler "$(CFLAGS)" -Xlinker "$(LDFLAGS)" $(filter %.cu %.cpp %.o, $^)
+	# corex
+	#$(NVCC) -o $@ $(NVCCFLAGS) $(LDFLAGS) $(filter %.cu %.cpp %.o, $^)
 
 clean:
 	$(RM) $(OBJ) $(BIN) $(CUBIN) $(CUOBJ) *~
