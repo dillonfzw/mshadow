@@ -18,9 +18,9 @@ USE_CUDA = 1
 # add the path to CUDA libary to link and compile flag
 # if you have already add them to enviroment variable, leave it as NONE
 # nv
-USE_CUDA_PATH = /usr/local/cuda
+#USE_CUDA_PATH = /usr/local/cuda
 # corex
-#USE_CUDA_PATH = /usr/local/corex
+USE_CUDA_PATH = /usr/local/corex
 
 #
 # choose the version of blas you want to use
